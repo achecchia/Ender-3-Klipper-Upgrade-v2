@@ -31,7 +31,7 @@ Current phase:
 - [Upgrade punch list](docs/punch-list.md)
 - [Completed upgrades](docs/completed-upgrades.md)
 - [Config and workflow notes](docs/config-and-workflow-notes.md)
-- [Audited hardware notes](docs/hardware-notes-audited.md)
+- [Hardware notes](docs/hardware-notes.md)
 - [Project history](docs/project-history.md)
 - [Future upgrade ideas](docs/future-upgrade-ideas.md)
 - Active Klipper configs: [`printer_data/config/`](printer_data/config/)
@@ -109,7 +109,7 @@ See [Future Upgrade Ideas](docs/future-upgrade-ideas.md) for details.
 - The installed Creality v4.2.2 board is the **non-silent** version, so noise reduction is an important future goal.
 - The top-mounted filament runout sensor may reduce usable Z height. Final safe Z height must be matched in both `printer.cfg` and the dedicated OrcaSlicer profile.
 - The runout sensor `PA4` note is a candidate until validated against the live config, trusted board pinout, or direct Klipper sensor testing.
-- The pancake extruder stepper's final verified wire order is documented in [Audited Hardware Notes](docs/hardware-notes-audited.md).
+- The pancake extruder stepper's final verified wire order is documented in [Hardware Notes](docs/hardware-notes.md).
 - Files beginning with `ai_` are proposed AI-generated replacements and are not active unless explicitly included by the live config.
 
 ---
