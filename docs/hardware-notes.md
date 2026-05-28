@@ -101,9 +101,88 @@ The BLTouch is currently working and should not be rewired unless there is a con
 
 ---
 
+## Filament Runout Sensor / DET Port
+
+Status: Installed / to be validated during final commissioning.
+
+The Creality 4.2.2 board has a 3-pin filament detection port labeled `DET`.
+
+The DET port maps to this Klipper pin:
+
+```ini
+switch_pin: PA4
+```
+
+Typical Klipper config:
+
+```ini
+[filament_switch_sensor runout_sensor]
+pause_on_runout: True
+switch_pin: PA4
+runout_gcode:
+    M117 Filament runout detected!
+    PAUSE
+insert_gcode:
+    M117 Filament inserted
+```
+
+If the sensor logic is backwards, invert the pin:
+
+```ini
+switch_pin: !PA4
+```
+
+Notes:
+
+- The runout sensor is mounted at the top of the printer.
+- Final Z-height clearance must be checked because the sensor and filament path may reduce safe usable Z travel.
+- Match final firmware Z max in OrcaSlicer after validation.
+
+---
+
+## Mainboard Enclosure / Grounding Note
+
+Status: Important safety context.
+
+A 3D-printed plastic mainboard enclosure is acceptable for housing the Creality 4.2.2 board, but it does not provide chassis grounding by itself.
+
+Important grounding rules:
+
+1. The green/yellow AC earth ground wire must remain securely attached to the PSU earth-ground terminal.
+2. The metal PSU chassis must remain properly bonded/bolted to the printer frame.
+3. Do not rely on the printed electronics enclosure for electrical grounding.
+4. Do not add random ground wires unless there is a specific measured reason and a safe grounding plan.
+
+Why this matters:
+
+- The PSU/frame earth bond is the important safety ground path.
+- A plastic enclosure can protect the board mechanically, but it is not a substitute for the printer's earth grounding.
+
+---
+
+## Fan / Voltage Verification Rule
+
+Status: Ongoing rule.
+
+Do not assume fan voltage based on size or connector style.
+
+Before wiring any fan, verify:
+
+- Fan voltage rating
+- Power source voltage
+- Current draw
+- Control method: always-on, PWM, MOSFET-switched, GPIO-controlled, or board-controlled
+- Grounding/common-ground requirements
+
+Important lesson:
+
+A 12V fan should not be treated as a correct choice for the Raspberry Pi's 5V power/GPIO path. If a fan is powered from the Pi side, it needs to be 5V-rated or driven through an appropriate external circuit.
+
+---
+
 ## Safety Reminder
 
-When working on stepper wiring, BLTouch wiring, heater wiring, or fan wiring:
+When working on stepper wiring, BLTouch wiring, heater wiring, fan wiring, or mains-side wiring:
 
 1. Power the printer off.
 2. Unplug AC power if working inside the electronics bay.
