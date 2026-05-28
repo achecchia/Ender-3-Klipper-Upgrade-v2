@@ -6,6 +6,32 @@ The goal is to keep a clear record of what is physically on the machine, where i
 
 ---
 
+## Base Printer
+
+Status: Installed / original platform.
+
+Source link:
+https://www.creality3dofficial.com/products/official-creality-ender-3-3d-printer?srsltid=AfmBOooijRqKdK1gHTpAJgoAMWA8nOw_ZDymNjQwWoCMLoLqmY01tuOh
+
+Printer location / function:
+
+- Base machine for this project.
+- Original Creality Ender 3 platform.
+
+Important machine-specific note:
+
+- This printer has a Creality v4.2.2 mainboard.
+- The installed v4.2.2 board is the **non-silent** version.
+- Quiet operation is an important future goal for this build.
+
+Config / tuning notes:
+
+- Current Klipper config and future tuning should assume the Creality 4.2.2 board unless/until the board is upgraded.
+- Stepper current is handled by physical Vref potentiometers, not software UART current control.
+- A future silent-board upgrade may become worthwhile for noise reduction, even if the current board remains functional.
+
+---
+
 ## Filament Runout Sensor
 
 Status: Installed.
