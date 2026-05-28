@@ -11,6 +11,7 @@ This printer is no longer my primary machine, but it is being treated as a long-
 ## Quick Links
 
 - [Upgrade punch list](docs/punch-list.md)
+- [Installed parts inventory](docs/installed-parts.md)
 - [Completed / installed upgrades](docs/completed-upgrades.md)
 - [Audited hardware notes](docs/hardware-notes-audited.md)
 - [Project history](docs/project-history.md)
@@ -103,12 +104,15 @@ Already installed or configured:
 - Ductinator cooling duct
 - Magnetic PEI build plate
 - Filament runout sensor mounted at the top of the printer
+- Belt tensioner
 - Input shaping calibration data saved
 - Bed mesh calibration saved
 - Klipper-Backup configured
 - Manual `update_git` macro/button enabled in Mainsail
 - OctoEverywhere installed for cloud access, notifications, and failure/spaghetti detection
 - UniFi VPN available for secure full remote access
+
+Detailed installed-part links and notes live in [Installed Parts Inventory](docs/installed-parts.md).
 
 Detailed installed-upgrade notes live in [Completed / Installed Upgrades](docs/completed-upgrades.md).
 
