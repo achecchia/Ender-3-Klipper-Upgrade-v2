@@ -284,7 +284,7 @@ Key reminders from the AI-assisted audit:
 - Verify fan voltage before buying or wiring.
 - Do not power a 12V fan directly from a Raspberry Pi 5V path.
 
-More details are in [`hardware-notes-audited.md`](hardware-notes-audited.md).
+More details are in [`hardware-notes.md`](hardware-notes.md).
 
 ---
 
