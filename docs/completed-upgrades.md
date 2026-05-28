@@ -1,18 +1,38 @@
-# Completed / Installed Upgrades
+# Completed Upgrades
 
-This document tracks upgrades and supporting services that have already been installed or configured on the Ender 3 Klipper build.
+This document tracks the parts, upgrades, services, and baseline calibration milestones that are already installed or configured on the Ender 3 Klipper build.
 
 Items listed here are considered part of the current machine baseline unless otherwise noted.
 
 ---
 
-## Hardware Upgrades
+## Base Printer
+
+Status: Installed / original platform.
+
+Source link:
+https://www.creality3dofficial.com/products/official-creality-ender-3-3d-printer?srsltid=AfmBOooijRqKdK1gHTpAJgoAMWA8nOw_ZDymNjQwWoCMLoLqmY01tuOh
+
+Notes:
+
+- Base machine for this project.
+- Original Creality Ender 3 platform.
+- This printer has a Creality v4.2.2 mainboard.
+- The installed v4.2.2 board is the **non-silent** version.
+- Quiet operation is an important future goal for this build.
+- Current Klipper config and future tuning should assume the Creality 4.2.2 board unless/until the board is upgraded.
+- Stepper current is handled by physical Vref potentiometers, not software UART current control.
+- A future silent-board upgrade may become worthwhile for noise reduction, even if the current board remains functional.
+
+---
+
+## Hardware Upgrades / Installed Parts
 
 ### BMG-Style Direct Drive Extruder
 
-Status: Installed
+Status: Installed.
 
-Resource link:
+Source link:
 https://www.aliexpress.us/item/3256805805447850.html?spm=a2g0o.order_list.order_list_main.59.b0e318020SxXM1&gatewayAdapt=glo2usa
 
 Notes:
@@ -25,29 +45,22 @@ Notes:
 
 ### Pancake Extruder Stepper Motor
 
-Status: Installed and wired correctly
+Status: Installed and wired correctly.
 
-Resource link:
+Source link:
 https://www.amazon.com/dp/B0FHHXHHRW?ref=ppx_yo2ov_dt_b_fed_asin_title
 
 Notes:
 
 - Installed as part of the direct-drive conversion.
 - The pancake stepper required repinning/rewiring to work correctly with the Creality 4.2.2 E-stepper port.
-- Motor coil pairs are:
-
-```text
-Phase A: Black + Green
-Phase B: Red + Blue
-```
-
-- Final working connector order, left to right, is:
+- Final verified connector order, left to right, is:
 
 ```text
 Black, Green, Red, Blue
 ```
 
-- The incorrect wire order caused a thump/noise without smooth movement, which indicated a phase mismatch.
+- The incorrect order `Black, Red, Blue, Green` caused a thump/noise without smooth movement, indicating a phase mismatch.
 - Motor current is controlled by the physical Vref potentiometer on the Creality 4.2.2 board.
 - No Klipper UART/TMC driver current control is currently active.
 - Do not add `[tmc2209 extruder]` or software `run_current` settings unless the mainboard is upgraded to one with UART-controlled drivers.
@@ -55,15 +68,15 @@ Black, Green, Red, Blue
 
 More detail:
 
-- See [`docs/hardware-notes.md`](hardware-notes.md)
+- See [`hardware-notes-audited.md`](hardware-notes-audited.md)
 
 ---
 
 ### Ductinator Cooling Duct
 
-Status: Installed / in use for the current toolhead plan
+Status: Installed / in use for the current toolhead plan.
 
-Resource link:
+Source link:
 https://www.thingiverse.com/thing:6939003
 
 Notes:
@@ -82,21 +95,27 @@ y_offset: -28
 
 ### Magnetic PEI Build Plate
 
-Status: Installed
+Status: Installed.
 
-Resource link:
-Not provided.
+Source link:
+https://www.amazon.com/dp/B07XBM24HN?ref_=ppx_hzsearch_conn_dt_b_fed_asin_title_45&th=1
 
 Notes:
 
-- Used as the current print surface.
+- Installed as the current removable print surface.
+- Used as the baseline build plate for future slicer profile work.
 - Future OrcaSlicer profile should assume a PEI build surface.
+- First-layer tuning and bed temperature assumptions should be based on this surface.
+- Bed mesh should be regenerated after silicone bed mounts and final hotend/toolhead work are complete.
 
 ---
 
 ### Top-Mounted Filament Runout Sensor
 
-Status: Installed
+Status: Installed physically; final firmware behavior still needs validation.
+
+Sensor source link:
+https://www.amazon.com/dp/B07V8TVK6N?ref_=ppx_hzsearch_conn_dt_b_fed_asin_title_43
 
 Mount resource link:
 https://www.printables.com/model/368594-mount-for-the-filament-sensor-for-ender-3-v2
@@ -104,23 +123,33 @@ https://www.printables.com/model/368594-mount-for-the-filament-sensor-for-ender-
 Notes:
 
 - Filament sensor is mounted at the top of the printer.
+- Detects filament presence/runout.
 - This may reduce safe usable Z height depending on filament path, toolhead clearance, and cable routing.
 - User is okay with reducing Z height if needed.
 - Final safe Z height must be matched in both `printer.cfg` and the dedicated OrcaSlicer profile.
+- Earlier notes identify `PA4` as a likely Creality 4.2.2 DET/runout pin, but this still needs validation.
+- Final sensor behavior should be tested before relying on it during long prints.
+
+More detail:
+
+- See [`hardware-notes-audited.md`](hardware-notes-audited.md)
 
 ---
 
 ### BLTouch
 
-Status: Installed and working
+Status: Installed and working.
 
-Resource link:
-Not provided.
+Source link:
+https://www.amazon.com/dp/B0CGLM4QK8?ref_=ppx_hzsearch_conn_dt_b_fed_asin_title_44
 
 Notes:
 
 - BLTouch is configured as the Z virtual endstop.
-- The previous Z-axis homing crash was resolved by correcting the BLTouch signal/ground wiring orientation.
+- Mounted on the toolhead.
+- Used for Z homing and bed probing.
+- A previous Z-axis homing crash was resolved by correcting the BLTouch signal/ground wiring orientation.
+- Known working wiring note: white is signal, black is ground.
 - Current working BLTouch-related configuration includes:
 
 ```ini
@@ -136,7 +165,24 @@ pin_up_touch_mode_reports_triggered: False
 
 More detail:
 
-- See [`docs/hardware-notes.md`](hardware-notes.md)
+- See [`hardware-notes-audited.md`](hardware-notes-audited.md)
+
+---
+
+### Belt Tensioner
+
+Status: Installed.
+
+Source link:
+https://www.amazon.com/dp/B096M2HNP9?ref_=ppx_hzsearch_conn_dt_b_fed_asin_title_46
+
+Notes:
+
+- Installed to improve belt tension adjustment.
+- Exact axis/location should be confirmed and documented later if needed.
+- Belt tension affects motion quality, ringing, and input shaping results.
+- Re-check belt tension before final speed/acceleration tuning.
+- Revalidate input shaping later if belt tension or toolhead mass changes significantly.
 
 ---
 
@@ -144,10 +190,7 @@ More detail:
 
 ### Raspberry Pi Printer-Powered Setup
 
-Status: Installed
-
-Resource link:
-Not provided.
+Status: Installed.
 
 Power path:
 
@@ -171,16 +214,15 @@ Notes:
 
 ### Creality 4.2.2 Mainboard / Klipper USB Connection
 
-Status: Installed and working
-
-Resource link:
-Not provided.
+Status: Installed and working.
 
 Notes:
 
 - The Raspberry Pi communicates with the Creality 4.2.2 board over USB.
+- The installed 4.2.2 board is the non-silent version.
 - Stepper currents are adjusted physically on the board through Vref potentiometers.
 - No active UART-controlled TMC configuration is currently used in Klipper.
+- A quieter electronics phase may eventually include a silent board upgrade.
 
 ---
 
@@ -188,10 +230,7 @@ Notes:
 
 ### Klipper + Mainsail
 
-Status: Installed and working
-
-Resource link:
-Not provided.
+Status: Installed and working.
 
 Notes:
 
@@ -203,10 +242,7 @@ Notes:
 
 ### Klipper-Backup
 
-Status: Installed and working
-
-Resource link:
-Not provided.
+Status: Installed and working.
 
 Notes:
 
@@ -228,10 +264,7 @@ update_git MESSAGE="backup message here"
 
 ### G-Code Shell Command Extension
 
-Status: Installed and working
-
-Resource link:
-Not provided.
+Status: Installed and working.
 
 Notes:
 
@@ -242,10 +275,7 @@ Notes:
 
 ### OctoEverywhere for Klipper
 
-Status: Installed
-
-Resource link:
-Not provided.
+Status: Installed.
 
 Notes:
 
@@ -256,17 +286,18 @@ Notes:
 
 ### GitHub Documentation / Project Tracking
 
-Status: Active
+Status: Active.
 
-Resource link:
+Repository link:
 https://github.com/achecchia/Ender-3-Klipper-Upgrade-v2
 
 Notes:
 
-- README is now being used as the project overview.
+- README is the project overview.
 - `docs/punch-list.md` tracks the staged upgrade process.
 - `docs/future-upgrade-ideas.md` tracks optional future ideas.
-- `docs/hardware-notes.md` tracks hardware-specific wiring and troubleshooting notes.
+- `docs/hardware-notes-audited.md` tracks hardware-specific wiring and troubleshooting notes.
+- `docs/config-and-workflow-notes.md` tracks workflow, config, backup, and remote-access notes.
 - This file tracks completed/installed upgrades.
 
 ---
@@ -275,7 +306,7 @@ Notes:
 
 ### Bed Mesh
 
-Status: Completed baseline mesh exists
+Status: Completed baseline mesh exists.
 
 Notes:
 
@@ -286,9 +317,7 @@ Notes:
 
 ### Input Shaping
 
-Status: Completed baseline input shaping data exists
-
-Notes:
+Status: Completed baseline input shaping data exists.
 
 Current saved values in the live config:
 
@@ -298,6 +327,8 @@ shaper_freq_y = 33.4
 shaper_type_x = mzv
 shaper_freq_x = 74.0
 ```
+
+Notes:
 
 - These are believable for the current Ender 3 bedslinger setup.
 - Revalidate later only if the final toolhead mass changes significantly.
@@ -312,30 +343,44 @@ They should remain tracked in the punch list and/or future upgrade documents unt
 
 ### Trianglelab 115W CHC Pro Hotend Kit
 
-Status: Pending install
+Status: Pending install.
 
 https://www.aliexpress.us/item/3256804038017822.html?spm=a2g0o.order_list.order_list_main.11.b0e318020SxXM1&gatewayAdapt=glo2usa
 
 ### Mellow All-Metal Bi-Metal CR10/Crazy Heatbreak
 
-Status: Pending install
+Status: Pending install.
 
 https://www.aliexpress.us/item/3256802721411891.html?spm=a2g0o.order_list.order_list_main.23.b0e318020SxXM1&gatewayAdapt=glo2usa
 
 ### Mellow Gold DLC Hardened Steel / Copper Bimetal GHC V6 Nozzle
 
-Status: Pending install
+Status: Pending install.
 
-https://www.aliexpress.us/item/3256809178438391.html?spm=a2g0o.order_list.order_list_main.29.b0e318020SxXM1&gatewayAdapt=glo2usa
+https://www.aliexpress.us/item/3256809178438391.html?spm=a2g0o.order_list.order_list_main.29.b0e318020SxXM1
 
 ### Dual Blower Fans for Duct Setup
 
-Status: Pending install / planned with duct setup
+Status: Pending install / planned with duct setup.
 
 https://www.aliexpress.us/item/3256808842298737.html?spm=a2g0o.order_list.order_list_main.35.3c1818020NUC69&gatewayAdapt=glo2usa
 
 ### Silicone Bed Mounts / Spring Replacements
 
-Status: Pending install
+Status: Pending install.
 
 https://www.aliexpress.com/item/3256808932604349.html?spm=a2g0o.order_list.order_list_main.17.3c1818020NUC69
+
+---
+
+## Documentation Notes
+
+When more completed parts or upgrades are added, each entry should include:
+
+- part or upgrade name
+- source link when available
+- installed status
+- printer location / function
+- fitment notes
+- config/tuning impact
+- related documentation links
