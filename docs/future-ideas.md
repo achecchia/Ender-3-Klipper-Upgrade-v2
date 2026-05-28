@@ -132,6 +132,28 @@ Track as a future idea only. Finish the current bed-stability plan first, includ
 
 ---
 
+### Logitech Camera Mount
+
+Link: https://www.printables.com/model/970483-camera-mount-ender-3-v3-se
+
+Status: Future quality-of-life idea; fitment not verified yet.
+
+Reason:
+A mounted Logitech camera would improve remote monitoring, print visibility, and OctoEverywhere failure/spaghetti detection.
+
+Things to verify:
+
+- Whether the Ender 3 V3 SE mount fits or can be adapted to this original Ender 3 frame
+- Camera angle and bed coverage
+- Clearance from the moving bed, gantry, toolhead, and wiring
+- Cable routing to the Raspberry Pi
+- Whether the mount vibrates during printing
+
+Current decision:
+Track this as an idea only until the physical fitment is checked on Leonardo E3.
+
+---
+
 ### WLED Printer Lighting
 
 Status: Good future quality-of-life idea.
