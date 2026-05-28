@@ -8,6 +8,14 @@ This printer is no longer my primary machine, but it is being treated as a long-
 
 ---
 
+## Quick Links
+
+- [Upgrade punch list](docs/punch-list.md)
+- [Future upgrade ideas](docs/future-upgrade-ideas.md)
+- Active Klipper configs: [`printer_data/config/`](printer_data/config/)
+
+---
+
 ## Project Goals
 
 Primary goals:
@@ -62,3 +70,285 @@ Buck converter stepped down to approximately 5.1V
 USB cable
     ↓
 Raspberry Pi micro USB power input
+```
+
+This was done intentionally so the Pi is powered from the printer while still feeding power through the Pi's normal protected power input path, including the Pi's built-in fuse protection.
+
+Future checks:
+
+- Verify stable 5V behavior under heater/load transients
+- Watch for Pi undervoltage warnings
+- Watch for USB disconnects or webcam instability if a camera is added
+
+---
+
+## Installed / Current Upgrades
+
+Already installed or configured:
+
+- Klipper on Raspberry Pi
+- Mainsail web interface
+- BLTouch
+- BMG-style direct drive extruder conversion
+- Pancake extruder stepper motor
+- Ductinator cooling duct
+- Magnetic PEI build plate
+- Filament runout sensor mounted at the top of the printer
+- Input shaping calibration data saved
+- Bed mesh calibration saved
+- Klipper-Backup configured
+- Manual `update_git` macro/button enabled in Mainsail
+- OctoEverywhere installed for cloud access, notifications, and failure/spaghetti detection
+- UniFi VPN available for secure full remote access
+
+---
+
+## Planned / Pending Hardware Upgrades
+
+Parts planned for installation before final tuning:
+
+- Trianglelab 115W High Power CHC Pro ceramic heating core kit for Ender 3
+- Mellow all-metal bi-metal CR10/Crazy heatbreak throat for Ender 3
+- Mellow Gold DLC hardened steel / copper wear-resistant bimetal GHC V6 nozzle
+- Dual blower fans for the duct setup
+- Silicone bed mounts/spacers to replace the bed springs
+
+Future possible upgrade, not planned immediately:
+
+- Dual-Z upgrade
+- BTT mainboard upgrade
+- WLED printer lighting
+- Mainboard power switching
+- Z-axis height extender for direct-drive clearance
+
+See [Future Upgrade Ideas](docs/future-upgrade-ideas.md) for notes and links.
+
+---
+
+## Filament Runout Sensor / Z Height Note
+
+The filament runout sensor is mounted at the top of the printer.
+
+Because of that, usable Z height may need to be reduced later to avoid physical interference near the top of travel. This is acceptable because this Ender 3 is not the primary printer.
+
+When final tuning is complete:
+
+- Verify true safe maximum Z height
+- Update `[stepper_z] position_max` in `printer.cfg` if needed
+- Create a dedicated OrcaSlicer profile for this specific Ender 3
+- Match OrcaSlicer printable volume to the safe firmware volume
+
+---
+
+## Configuration File Layout
+
+The active Klipper files are backed up under:
+
+```text
+printer_data/config/
+```
+
+Important active files:
+
+```text
+printer_data/config/printer.cfg
+printer_data/config/macros.cfg
+printer_data/config/shell_command.cfg
+printer_data/config/adxlmcu.cfg
+```
+
+`mainsail.cfg` may appear as a symlink on the printer:
+
+```text
+mainsail.cfg -> /home/pi/mainsail-config/mainsail.cfg
+```
+
+That file is part of the Mainsail install structure and may not be backed up like a normal local config file. This is expected.
+
+---
+
+## `ai_` File Convention
+
+Files beginning with `ai_` are AI-generated proposed replacement files.
+
+They are not active unless they are explicitly included by the live `printer.cfg`.
+
+Current convention:
+
+```text
+printer.cfg        = active live file
+ai_printer.cfg     = proposed AI-generated replacement
+old_printer_*.cfg  = previous archived version
+```
+
+Before promoting an `ai_` file:
+
+1. Run a backup
+2. Rename the current active file to a dated `old_` version
+3. Rename the `ai_` file to the active filename
+4. Restart Klipper
+5. Confirm the printer loads cleanly
+6. Run another backup after validation
+
+Recommended backup command before file swaps:
+
+```gcode
+update_git MESSAGE="backup before promoting ai config files"
+```
+
+---
+
+## Backup Workflow
+
+Klipper-Backup is installed and connected to this GitHub repository.
+
+Manual backup is available from the Mainsail dashboard through the `update_git` macro/button.
+
+Manual backup from Mainsail console:
+
+```gcode
+update_git
+```
+
+Manual backup with commit message:
+
+```gcode
+update_git MESSAGE="backup before CHC hotend install"
+```
+
+Manual backup from SSH:
+
+```bash
+~/klipper-backup/script.sh
+```
+
+The manual backup button works through:
+
+```text
+Mainsail button
+    ↓
+update_git macro
+    ↓
+gcode_shell_command
+    ↓
+Klipper-Backup script
+    ↓
+GitHub repository
+```
+
+---
+
+## Remote Access / Monitoring Stack
+
+Current remote and monitoring strategy:
+
+```text
+Mainsail       = local Klipper web UI
+Moonraker      = Klipper API/backend
+UniFi VPN      = secure full remote admin access
+OctoEverywhere = cloud access, notifications, webcam/failure monitoring
+GitHub         = config history and documentation
+```
+
+Use OctoEverywhere for:
+
+- Print status
+- Notifications
+- Failure/spaghetti detection
+- Quick remote viewing
+
+Use UniFi VPN for higher-risk/admin tasks:
+
+- SSH access
+- Editing config files
+- Updating Klipper/Moonraker
+- Restarting services
+- Troubleshooting network/system issues
+
+Avoid exposing Moonraker or Mainsail directly to the public internet.
+
+---
+
+## Current Tuning Philosophy
+
+The printer is currently in a hardware transition phase.
+
+Do not perform final tuning until all pending hardware upgrades are installed.
+
+Do not finalize yet:
+
+- Pressure advance
+- Retraction
+- Max volumetric flow
+- Acceleration limits
+- Speed limits
+- OrcaSlicer performance profile
+- Final input shaper validation
+
+Reason:
+
+The hotend, heatbreak, nozzle, cooling, and bed support changes will alter the printer's actual thermal and mechanical behavior. Tuning before those parts are installed would create temporary numbers that will need to be redone.
+
+Current priority:
+
+```text
+Finish hardware installation
+    ↓
+Verify safe operation
+    ↓
+PID tune
+    ↓
+Extrusion sanity check
+    ↓
+Retraction tune
+    ↓
+Pressure advance tune
+    ↓
+Max flow characterization
+    ↓
+Speed/acceleration tuning
+    ↓
+OrcaSlicer profile creation
+```
+
+See [Upgrade Punch List](docs/punch-list.md) for the full staged checklist.
+
+---
+
+## Known Live Config Notes
+
+The currently active `printer.cfg` is the working baseline, not necessarily the final cleaned version.
+
+Known items to address later:
+
+- Duplicate `[safe_z_home]` section should be cleaned
+- `[gcode_arcs]` should use Klipper-style `resolution: 1.0` syntax
+- Hotend `min_temp: -30` should be changed to a safer value such as `0`
+- Macro stack should eventually be simplified
+- Existing adaptive mesh/purge macro behavior should be reviewed before relying on it
+- Final CHC hotend config will require PID tuning and likely max temp/thermistor review
+
+These should be changed deliberately, with backups before and after.
+
+---
+
+## Related Printers / Context
+
+Other printers available for comparison and production use:
+
+- Elegoo Centauri Carbon
+- Anycubic Kobra S1 with two ACE units
+
+This Ender 3 is being maintained as a custom, known, long-term machine rather than the only production printer.
+
+---
+
+## General Rule for This Build
+
+Back up before changing anything important.
+
+Do not chase tuning numbers until the hardware is stable.
+
+Keep the printer understandable, reversible, and maintainable.
+
+This is a project car, not a disposable appliance.
