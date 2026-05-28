@@ -193,7 +193,7 @@ The bad wiring behavior was a thump/noise without smooth movement, indicating a 
 Detailed notes are in:
 
 ```text
-docs/hardware-notes.md
+docs/hardware-notes-audited.md
 ```
 
 ---
@@ -219,11 +219,11 @@ How to treat this:
 
 ---
 
-## Gemini Reliability / Voltage Verification Lesson
+## AI-Assisted Voltage Verification Lesson
 
 Status: Ongoing rule.
 
-During the earlier AI-guided work, bad advice was given around fan voltage: a 12V fan was discussed in the context of being powered from Raspberry Pi 5V power.
+During earlier AI-assisted work, bad advice was given around fan voltage: a 12V fan was discussed in the context of being powered from Raspberry Pi 5V power.
 
 Project rule going forward:
 
