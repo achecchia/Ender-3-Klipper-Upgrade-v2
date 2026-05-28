@@ -11,6 +11,9 @@ This printer is no longer my primary machine, but it is being treated as a long-
 ## Quick Links
 
 - [Upgrade punch list](docs/punch-list.md)
+- [Completed / installed upgrades](docs/completed-upgrades.md)
+- [Hardware notes](docs/hardware-notes.md)
+- [Project history](docs/project-history.md)
 - [Future upgrade ideas](docs/future-upgrade-ideas.md)
 - Active Klipper configs: [`printer_data/config/`](printer_data/config/)
 
@@ -44,7 +47,8 @@ Base printer:
 - Creality Ender 3
 - Creality 4.2.2 mainboard
 - Klipper firmware
-- Raspberry Pi host connected to the printer mainboard over USB
+- Raspberry Pi 3 B+ host connected to the printer mainboard over USB
+- Fresh Raspberry Pi SD card rebuild after the original card failed
 - Mainsail web interface
 - Moonraker backend
 - GitHub-backed Klipper config history
@@ -55,6 +59,12 @@ Mainboard / stepper behavior:
 - Stepper current is adjusted physically with Vref potentiometers on the board
 - No active Klipper UART/TMC driver control is currently configured
 - No `[tmc2209]` or equivalent driver sections are currently active in the live config
+
+Firmware status:
+
+- The Creality 4.2.2 MCU firmware was recompiled and reflashed during the 2026 resurrection phase.
+- This cleared the Klipper `STEPPER_STEP_BOTH_EDGE` deprecated-code warning.
+- See [Project History](docs/project-history.md) for the recovery timeline.
 
 ---
 
@@ -90,7 +100,7 @@ Already installed or configured:
 - Mainsail web interface
 - BLTouch
 - BMG-style direct drive extruder conversion
-- Pancake extruder stepper motor
+- Pancake extruder stepper motor, repinned to final working wire order
 - Ductinator cooling duct
 - Magnetic PEI build plate
 - Filament runout sensor mounted at the top of the printer
@@ -100,6 +110,10 @@ Already installed or configured:
 - Manual `update_git` macro/button enabled in Mainsail
 - OctoEverywhere installed for cloud access, notifications, and failure/spaghetti detection
 - UniFi VPN available for secure full remote access
+
+Detailed installed-upgrade notes live in [Completed / Installed Upgrades](docs/completed-upgrades.md).
+
+Wiring and hardware-specific gotchas live in [Hardware Notes](docs/hardware-notes.md).
 
 ---
 
@@ -130,6 +144,14 @@ See [Future Upgrade Ideas](docs/future-upgrade-ideas.md) for notes and links.
 The filament runout sensor is mounted at the top of the printer.
 
 Because of that, usable Z height may need to be reduced later to avoid physical interference near the top of travel. This is acceptable because this Ender 3 is not the primary printer.
+
+Runout sensor board note:
+
+```ini
+switch_pin: PA4
+```
+
+The Creality 4.2.2 `DET` port maps to `PA4`. If the switch logic is backwards, use `!PA4`.
 
 When final tuning is complete:
 
@@ -267,6 +289,12 @@ Use UniFi VPN for higher-risk/admin tasks:
 
 Avoid exposing Moonraker or Mainsail directly to the public internet.
 
+Optional local physical interface:
+
+- An old Samsung phone may be mounted later.
+- Preferred interface is Mainsail as a full-screen web app or Mobileraker.
+- KlipperScreen was tested and removed because the phone/XServer path was unreliable and unnecessary for the Pi 3 B+.
+
 ---
 
 ## Current Tuning Philosophy
@@ -329,6 +357,21 @@ Known items to address later:
 - Final CHC hotend config will require PID tuning and likely max temp/thermistor review
 
 These should be changed deliberately, with backups before and after.
+
+---
+
+## Electrical / Hardware Safety Rules
+
+Key reminders from the resurrection phase:
+
+- Verify fan voltage before buying or wiring.
+- Do not power a 12V fan directly from Raspberry Pi 5V power/GPIO.
+- The green/yellow AC earth ground must remain secured to the PSU earth terminal.
+- The PSU chassis should remain bonded to the printer frame.
+- A printed electronics enclosure does not replace chassis grounding.
+- Power down before repinning stepper, BLTouch, fan, or sensor wiring.
+
+More details are in [Hardware Notes](docs/hardware-notes.md).
 
 ---
 
