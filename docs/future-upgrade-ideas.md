@@ -6,6 +6,29 @@ The current priority is to finish the hotend, cooling, and bed-stability upgrade
 
 ---
 
+## Important Future Goal
+
+### Quiet Operation / Silent Electronics
+
+Status: Important future goal.
+
+Reason:
+
+This Ender 3 has a Creality v4.2.2 mainboard, but it is the **non-silent** version. Reducing machine noise is an important long-term goal for this build.
+
+Potential paths to quieter operation:
+
+- Future silent mainboard upgrade, likely BTT SKR Mini E3-style or similar
+- Quieter hotend, part-cooling, electronics, and PSU fans where appropriate
+- Better fan control where supported
+- Motion tuning that avoids unnecessary harshness without sacrificing reliability
+
+Current decision:
+
+Do not replace the board during the active hotend/cooling hardware phase. Keep the current 4.2.2 board until the printer is mechanically and thermally stable, then revisit quiet-operation upgrades as a focused phase.
+
+---
+
 ## Low Priority / Optional
 
 ### Z-Axis Height Extender for Direct-Drive Clearance
@@ -37,6 +60,7 @@ Status: Future modernization idea, not part of the current phase.
 
 Potential reasons to revisit later:
 
+- Quieter stepper operation compared with the current non-silent Creality v4.2.2 board
 - Software stepper-current control
 - Cleaner fan control
 - Independent dual-Z support
@@ -49,7 +73,7 @@ Preferred category if revisited:
 - BTT SKR Mini E3-style board
 
 Current decision:
-Keep the Creality 4.2.2 board for now. It is working and is not the current bottleneck.
+Keep the Creality 4.2.2 board for now. It is working and is not the current bottleneck. Revisit later as part of a dedicated quiet-operation/electronics modernization phase.
 
 ---
 
