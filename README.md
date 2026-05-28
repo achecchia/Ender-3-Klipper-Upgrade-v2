@@ -28,12 +28,11 @@ Current phase:
 
 ## Quick Links
 
-- [Upgrade punch list](docs/punch-list.md)
-- [Completed upgrades](docs/completed-upgrades.md)
-- [Config and workflow notes](docs/config-and-workflow-notes.md)
-- [Hardware notes](docs/hardware-notes.md)
+- [Punch list](docs/punch-list.md)
+- [Upgrades](docs/upgrades.md)
+- [Configuration](docs/configuration.md)
 - [Project history](docs/project-history.md)
-- [Future upgrade ideas](docs/future-upgrade-ideas.md)
+- [Future ideas](docs/future-ideas.md)
 - Active Klipper configs: [`printer_data/config/`](printer_data/config/)
 
 ---
@@ -50,7 +49,7 @@ Current phase:
 
 ---
 
-## Completed / Current Baseline
+## Current Baseline
 
 Already installed or configured:
 
@@ -69,7 +68,9 @@ Already installed or configured:
 - OctoEverywhere for remote status/notifications/failure monitoring
 - UniFi VPN for secure full remote admin access
 
-See [Completed Upgrades](docs/completed-upgrades.md) for installed part links, completed upgrade notes, and current baseline details.
+See [Upgrades](docs/upgrades.md) for installed part links, completed upgrades, and near-term planned hardware.
+
+See [Configuration](docs/configuration.md) for machine architecture, wiring/config notes, software services, backup workflow, remote access, and calibration status.
 
 ---
 
@@ -80,27 +81,20 @@ Parts planned for installation before final tuning:
 - Trianglelab 115W CHC Pro ceramic heating core kit
 - Mellow all-metal bi-metal heatbreak
 - Mellow Gold DLC hardened steel / copper bimetal nozzle
-- Dual blower fans for the duct setup
+- Dual 24V part-cooling fans for the Ductinator
 - Silicone bed mounts/spacers to replace the bed springs
 
 After those are installed, the printer should go through PID tuning, extrusion checks, bed mesh, retraction tuning, pressure advance, max-flow testing, speed/acceleration tuning, and OrcaSlicer profile creation.
 
-See [Upgrade Punch List](docs/punch-list.md) for the staged process.
+See [Punch List](docs/punch-list.md) for the staged process.
 
 ---
 
 ## Future Plans
 
-Possible future upgrades after the current hardware phase:
+Longer-term ideas live in [Future Ideas](docs/future-ideas.md).
 
-- Quiet-operation upgrades
-- Silent mainboard upgrade
-- Dual-Z upgrade
-- WLED printer lighting
-- Mainboard power switching while keeping the Raspberry Pi powered
-- Z-axis height extender only if usable Z height becomes a real limitation
-
-See [Future Upgrade Ideas](docs/future-upgrade-ideas.md) for details.
+Examples include quiet-operation upgrades, lighting ideas, motion-system ideas, power-switching ideas, cosmetic ideas, and anything else worth tracking later.
 
 ---
 
@@ -109,7 +103,7 @@ See [Future Upgrade Ideas](docs/future-upgrade-ideas.md) for details.
 - The installed Creality v4.2.2 board is the **non-silent** version, so noise reduction is an important future goal.
 - The top-mounted filament runout sensor may reduce usable Z height. Final safe Z height must be matched in both `printer.cfg` and the dedicated OrcaSlicer profile.
 - The runout sensor `PA4` note is a candidate until validated against the live config, trusted board pinout, or direct Klipper sensor testing.
-- The pancake extruder stepper's final verified wire order is documented in [Hardware Notes](docs/hardware-notes.md).
+- The pancake extruder stepper's final verified wire order is documented in [Configuration](docs/configuration.md).
 - Files beginning with `ai_` are proposed AI-generated replacements and are not active unless explicitly included by the live config.
 
 ---
