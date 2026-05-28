@@ -2,7 +2,7 @@
 
 This repository documents and backs up my long-term Ender 3 Klipper upgrade project.
 
-The goal of this machine is not to turn an Ender 3 into a completely different printer. The goal is to maintain and evolve it like a long-owned project car: reliable, well-understood, easier to service, faster than stock, and upgraded in deliberate stages.
+The goal of this machine is not to turn an Ender 3 into a completely different printer. The goal is to maintain and evolve it like a long-owned project car: reliable, well-understood, easier to service, faster than stock, quieter, and upgraded in deliberate stages.
 
 This printer is no longer my primary machine, but it is being treated as a long-term custom platform for learning, testing, maintenance, and reliable everyday use.
 
@@ -26,6 +26,7 @@ Primary goals:
 
 - Keep the printer reliable and maintainable
 - Improve performance beyond stock Ender 3 behavior
+- Make the machine quieter over time
 - Avoid unnecessary complexity
 - Use Klipper intentionally, not randomly
 - Preserve known-good configuration history
@@ -36,6 +37,7 @@ Target behavior:
 
 - Balanced speed and reliability
 - Faster than stock Ender 3
+- Quieter than the current non-silent electronics/fan setup
 - Stable enough to use without constant re-tuning
 
 ---
@@ -45,7 +47,7 @@ Target behavior:
 Base printer:
 
 - Creality Ender 3
-- Creality 4.2.2 mainboard
+- Creality 4.2.2 mainboard, non-silent version
 - Klipper firmware
 - Raspberry Pi 3 B+ host connected to the printer mainboard over USB
 - Fresh Raspberry Pi SD card rebuild after the original card failed
@@ -55,10 +57,11 @@ Base printer:
 
 Mainboard / stepper behavior:
 
-- Creality 4.2.2 board
+- Creality 4.2.2 board, non-silent version
 - Stepper current is adjusted physically with Vref potentiometers on the board
 - No active Klipper UART/TMC driver control is currently configured
 - No `[tmc2209]` or equivalent driver sections are currently active in the live config
+- Quiet operation is an important future goal, so a silent mainboard upgrade may be worth revisiting after the current hardware phase is stable
 
 Firmware status:
 
@@ -132,6 +135,8 @@ Parts planned for installation before final tuning:
 
 Future possible upgrade, not planned immediately:
 
+- Quiet-operation upgrades
+- Silent mainboard upgrade
 - Dual-Z upgrade
 - BTT mainboard upgrade
 - WLED printer lighting
@@ -388,6 +393,6 @@ Back up before changing anything important.
 
 Do not chase tuning numbers until the hardware is stable.
 
-Keep the printer understandable, reversible, and maintainable.
+Keep the printer understandable, reversible, quiet where practical, and maintainable.
 
 This is a project car, not a disposable appliance.
