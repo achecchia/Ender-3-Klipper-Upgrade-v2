@@ -300,6 +300,8 @@ Notes:
 
 - Klipper configuration is backed up to this GitHub repository.
 - Manual backup is available through the Mainsail `update_git` button.
+- The backup script was patched so the Raspberry Pi only stages `printer_data/config/` and does not stage, delete, or overwrite repository documentation.
+- Full recovery/prevention notes are documented in [`klipper-backup-docs-protection.md`](klipper-backup-docs-protection.md).
 
 Manual backup from Mainsail console:
 
@@ -332,6 +334,15 @@ Klipper-Backup script
     ↓
 GitHub repository
 ```
+
+Current docs-protection rule:
+
+```text
+The Raspberry Pi owns printer_data/config/ backups.
+GitHub/ChatGPT owns docs/ and README.md documentation edits.
+```
+
+Before reinstalling or updating Klipper-Backup, re-check [`klipper-backup-docs-protection.md`](klipper-backup-docs-protection.md).
 
 ---
 
