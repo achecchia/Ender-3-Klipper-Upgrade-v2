@@ -6,7 +6,7 @@ It is not a step-by-step setup guide. It is a record of what happened, what was 
 
 ---
 
-## Fresh SD Card / Klipper Resurrection
+## 2026-05 - Fresh SD Card / Klipper Resurrection
 
 Status: Completed.
 
@@ -42,7 +42,7 @@ Current status:
 
 ---
 
-## KIAUH Was Not Present Initially
+## 2026-05 - KIAUH Was Not Present Initially
 
 Status: Resolved.
 
@@ -66,7 +66,7 @@ Why this matters:
 
 ---
 
-## MCU Firmware Update
+## 2026-05 - MCU Firmware Update
 
 Status: Completed.
 
@@ -108,7 +108,7 @@ Notes:
 
 ---
 
-## Moonraker Update Manager Cleanup
+## 2026-05 - Moonraker Update Manager Cleanup
 
 Status: Completed.
 
@@ -147,7 +147,7 @@ Current status:
 
 ---
 
-## Samsung Phone Interface / KlipperScreen Attempt
+## 2026-05 - Samsung Phone Interface / KlipperScreen Attempt
 
 Status: KlipperScreen removed; phone interface idea remains optional.
 
@@ -174,7 +174,7 @@ Do not reinstall KlipperScreen unless there is a real dedicated display plan.
 
 ---
 
-## Direct Drive / Pancake Stepper Wiring
+## 2026-05 - Direct Drive / Pancake Stepper Wiring
 
 Status: Completed and documented.
 
@@ -193,12 +193,12 @@ The bad wiring behavior was a thump/noise without smooth movement, indicating a 
 Detailed notes are in:
 
 ```text
-docs/hardware-notes.md
+docs/configuration.md
 ```
 
 ---
 
-## Temporary Extrusion Baseline Before Final Hotend
+## 2026-05 - Temporary Extrusion Baseline Before Final Hotend
 
 Status: Temporary baseline only.
 
@@ -219,7 +219,7 @@ How to treat this:
 
 ---
 
-## AI-Assisted Voltage Verification Lesson
+## 2026-05 - AI-Assisted Voltage Verification Lesson
 
 Status: Ongoing rule.
 
