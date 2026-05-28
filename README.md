@@ -12,7 +12,7 @@ This printer is no longer my primary machine, but it is being treated as a long-
 
 - [Upgrade punch list](docs/punch-list.md)
 - [Completed / installed upgrades](docs/completed-upgrades.md)
-- [Hardware notes](docs/hardware-notes.md)
+- [Audited hardware notes](docs/hardware-notes-audited.md)
 - [Project history](docs/project-history.md)
 - [Future upgrade ideas](docs/future-upgrade-ideas.md)
 - Active Klipper configs: [`printer_data/config/`](printer_data/config/)
@@ -35,7 +35,6 @@ Target behavior:
 
 - Balanced speed and reliability
 - Faster than stock Ender 3
-- Ideally in the range of modern bedslinger performance, similar to or slightly beyond an Elegoo Neptune 4 class machine
 - Stable enough to use without constant re-tuning
 
 ---
@@ -113,7 +112,7 @@ Already installed or configured:
 
 Detailed installed-upgrade notes live in [Completed / Installed Upgrades](docs/completed-upgrades.md).
 
-Wiring and hardware-specific gotchas live in [Hardware Notes](docs/hardware-notes.md).
+Audited wiring and hardware-specific gotchas live in [Audited Hardware Notes](docs/hardware-notes-audited.md).
 
 ---
 
@@ -145,13 +144,7 @@ The filament runout sensor is mounted at the top of the printer.
 
 Because of that, usable Z height may need to be reduced later to avoid physical interference near the top of travel. This is acceptable because this Ender 3 is not the primary printer.
 
-Runout sensor board note:
-
-```ini
-switch_pin: PA4
-```
-
-The Creality 4.2.2 `DET` port maps to `PA4`. If the switch logic is backwards, use `!PA4`.
+The earlier Gemini notes identified `PA4` as the likely DET/runout pin, but this still needs validation against the live config, a board pinout for the exact board revision, or direct Klipper sensor testing.
 
 When final tuning is complete:
 
@@ -360,18 +353,17 @@ These should be changed deliberately, with backups before and after.
 
 ---
 
-## Electrical / Hardware Safety Rules
+## Hardware Fact-Check Notes
 
-Key reminders from the resurrection phase:
+Key reminders from the Gemini audit:
 
+- The final verified pancake stepper order is `Black, Green, Red, Blue`.
+- The earlier `Black, Red, Blue, Green` order failed.
+- Treat the runout sensor `PA4` note as a candidate until tested.
 - Verify fan voltage before buying or wiring.
-- Do not power a 12V fan directly from Raspberry Pi 5V power/GPIO.
-- The green/yellow AC earth ground must remain secured to the PSU earth terminal.
-- The PSU chassis should remain bonded to the printer frame.
-- A printed electronics enclosure does not replace chassis grounding.
-- Power down before repinning stepper, BLTouch, fan, or sensor wiring.
+- Do not power a 12V fan directly from a Raspberry Pi 5V path.
 
-More details are in [Hardware Notes](docs/hardware-notes.md).
+More details are in [Audited Hardware Notes](docs/hardware-notes-audited.md).
 
 ---
 
