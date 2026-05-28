@@ -1,12 +1,16 @@
-# Ender 3 Klipper Upgrade v2
+# Project Leonardo
 
-This repository documents my long-term Creality Ender 3 Klipper upgrade project.
+**Leonardo E3** is my long-term Creality Ender 3 Klipper rebuild.
 
 The goal is to keep this printer reliable, understandable, serviceable, reasonably fast, and eventually quieter while upgrading it in deliberate stages. This is a project-car style machine, not the primary production printer.
 
 ---
 
 ## Project Snapshot
+
+Printer name:
+
+- **Leonardo E3**
 
 Base machine:
 
@@ -116,4 +120,4 @@ Back up before changing anything important.
 
 Do not chase tuning numbers until the hardware is stable.
 
-Keep the printer understandable, reversible, quiet where practical, and maintainable.
+Keep Leonardo E3 understandable, reversible, quiet where practical, and maintainable.
