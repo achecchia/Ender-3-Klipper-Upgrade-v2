@@ -8,4 +8,4 @@ Use the audited version as the source of truth for hardware-specific notes.
 
 Reason:
 
-The original file included some Gemini-derived notes that needed clearer fact-check labeling. The audited file preserves the verified items and marks unverified assumptions appropriately.
+The original file included some earlier AI-derived notes that needed clearer fact-check labeling. The audited file preserves the verified items and marks unverified assumptions appropriately.
