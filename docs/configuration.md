@@ -17,6 +17,7 @@ Base platform:
 - Mainsail web interface
 - Moonraker backend/API layer
 - GitHub-backed Klipper config history
+- Headless final-control setup; stock screen is removed and not part of the normal operating state
 
 Mainboard / stepper behavior:
 
@@ -54,6 +55,7 @@ Current status:
 
 - Buck converter setup is installed and working.
 - Pi is powered through the normal micro USB input.
+- A printed 60mm Pi fan guard is installed on the Pi cooling setup.
 - Future mainboard power switching should keep the Pi powered independently of the Creality mainboard.
 
 Future checks:
@@ -61,6 +63,7 @@ Future checks:
 - Verify stable 5V behavior under heater/load transients
 - Watch for Pi undervoltage warnings
 - Watch for USB disconnects or webcam instability if a camera is added
+- Watch Pi thermals if the fan guard/enclosure/cooling path changes later
 
 ---
 
@@ -189,7 +192,16 @@ When final tuning is complete:
 
 ### Mainboard Enclosure / Electrical Safety Note
 
-Status: conservative documentation only.
+Status: printed airflow motherboard case is installed.
+
+Installed printed part:
+
+```text
+Ender 3/Pro/V2 Airflow Motherboard Case
+```
+
+Source:
+https://www.printables.com/model/1119480-ender-3pro-v2-airflow-motherboard-case/files
 
 A printed mainboard enclosure may be fine mechanically, but earlier AI-assisted grounding advice should not be treated as authoritative.
 
@@ -198,6 +210,23 @@ Project rule:
 - Preserve the stock printer safety design unless there is a measured reason to change it.
 - Do not add extra grounding or bonding wires based only on AI advice.
 - If anything around the PSU, enclosure, or electronics bay is changed, verify the work before powering the printer.
+- Keep mainboard wiring routed cleanly with no fan interference, no pinched wires, and no strain on connectors.
+- Confirm mainboard cooling airflow direction and clearance after any future electronics-bay changes.
+
+---
+
+### Z Motor Spacer
+
+Status: printed and installed.
+
+Source:
+https://www.thingiverse.com/thing:2925230
+
+Notes:
+
+- Installed at the Z motor to improve Z-axis alignment/spacing.
+- Treat this as part of the current mechanical baseline.
+- Re-check Z screw alignment, coupler behavior, and binding after any future Z-axis changes.
 
 ---
 
@@ -289,6 +318,8 @@ Notes:
 - Klipper is running on the Raspberry Pi.
 - Mainsail is the local web interface.
 - Moonraker is the backend/API layer.
+- Printer is normally operated headlessly; the original stock screen has been removed.
+- Reinstalling the stock screen is acceptable temporarily for calibration/troubleshooting only if it becomes useful, but it is not part of the intended final setup.
 
 ---
 
@@ -354,6 +385,7 @@ Notes:
 
 - Required for the Mainsail `update_git` macro/button to trigger Klipper-Backup from the UI.
 - `shell_command.cfg` is now included by the active `printer.cfg`.
+- `PULL_FROM_GIT` is available as a pull-only Mainsail macro for syncing GitHub-side docs/repo changes down to the Pi before using `update_git`.
 
 ---
 
@@ -402,6 +434,7 @@ Optional local physical interface:
 - An old Samsung phone may be mounted later.
 - Preferred interface is Mainsail as a full-screen web app or Mobileraker.
 - KlipperScreen was tested and removed because the phone/XServer path was unreliable and unnecessary for the Pi 3 B+.
+- Stock Ender 3 screen is removed for normal operation; it can be temporarily reinstalled only if a specific calibration/troubleshooting task benefits from it.
 
 ---
 
@@ -435,6 +468,7 @@ Notes:
 
 - These are believable for the current Ender 3 bedslinger setup.
 - Revalidate later only if the final toolhead mass changes significantly.
+- The installed Z motor spacer is part of the current mechanical baseline.
 
 ---
 
