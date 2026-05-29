@@ -11,6 +11,44 @@ The Raspberry Pi must not manage, delete, stage, or overwrite the docs folder.
 
 ---
 
+## Current Safe Workflow
+
+Normal local printer config backup:
+
+```text
+Press update_git in Mainsail
+```
+
+When any page/file is added or edited directly in GitHub first:
+
+```text
+1. Press PULL_FROM_GIT in Mainsail
+2. Confirm it finishes and lists the docs folder
+3. Press update_git in Mainsail only after the pull succeeds
+```
+
+The `PULL_FROM_GIT` macro is intentionally pull-only. It does not push anything.
+
+It runs:
+
+```bash
+cd $HOME/config_backup && git restore . && git pull --ff-only && git status --short && ls -la docs
+```
+
+A good Mainsail console result includes:
+
+```text
+Command {pull_from_git_script} finished
+```
+
+and a docs listing that includes the current docs files, including:
+
+```text
+klipper-backup-docs-protection.md
+```
+
+---
+
 ## What Happened
 
 The repository documentation files were created directly in GitHub:
@@ -61,39 +99,6 @@ find "$backup_path" -maxdepth 1 -mindepth 1 ! -name '.git' ! -name 'README.md' !
 ```
 
 That cleanup behavior made it even easier for documentation files to be missing locally.
-
----
-
-## Verified Symptoms
-
-The issue was confirmed by checking the backup script:
-
-```bash
-grep -R "git add" ~/klipper-backup -n
-```
-
-Problem result:
-
-```text
-/home/pi/klipper-backup/script.sh:274:git add .
-```
-
-The surrounding script section showed:
-
-```bash
-# Untrack all files so that any new excluded files are correctly ignored and deleted from remote
-git rm -r --cached . >/dev/null 2>&1
-git add .
-```
-
-The local backup repo also showed docs were not the problem after the initial fix, but config files were left as deleted after cleanup:
-
-```bash
-cd ~/config_backup
-git status --short
-```
-
-This originally showed deleted `printer_data/config/...` entries after the backup script ran, while `docs/` survived after the protection changes.
 
 ---
 
@@ -208,7 +213,97 @@ git restore . >/dev/null 2>&1 || true
 
 ---
 
-## Pulling the Restored Docs to the Pi
+## Pull From Git Mainsail Button
+
+A dedicated Mainsail macro/button was added so GitHub-side documentation changes can be pulled into the Pi's local backup repo before running a backup.
+
+The macro is named:
+
+```text
+PULL_FROM_GIT
+```
+
+It lives in:
+
+```text
+printer_data/config/shell_command.cfg
+```
+
+Macro config:
+
+```ini
+[gcode_macro PULL_FROM_GIT]
+description: Pull latest GitHub repo changes into the local Klipper-Backup repo without pushing
+gcode:
+    RUN_SHELL_COMMAND CMD=pull_from_git_script
+
+[gcode_shell_command pull_from_git_script]
+command: bash -c "cd $HOME/config_backup && git restore . && git pull --ff-only && git status --short && ls -la docs"
+timeout: 90.0
+verbose: True
+```
+
+This button should be used whenever documentation or repo files are changed directly in GitHub before pressing the normal `update_git` backup button.
+
+Purpose:
+
+```text
+PULL_FROM_GIT = pull GitHub changes down to the Pi
+update_git     = push current printer config backup up to GitHub
+```
+
+Keep these two actions separate. Pull first, then push/back up.
+
+---
+
+## Disabled Automatic Backup Services
+
+The Pi had automatic Klipper-Backup services enabled. These were disabled so backups only happen intentionally.
+
+Disabled services:
+
+```text
+klipper-backup-on-boot.service
+klipper-backup-filewatch.service
+```
+
+Reason:
+
+```text
+Automatic backups can push before the Pi has pulled GitHub-side documentation changes.
+Manual backups are safer for this repo because documentation is also maintained directly in GitHub.
+```
+
+Commands used:
+
+```bash
+sudo systemctl disable klipper-backup-on-boot.service
+sudo systemctl stop klipper-backup-on-boot.service
+
+sudo systemctl disable klipper-backup-filewatch.service
+sudo systemctl stop klipper-backup-filewatch.service
+```
+
+Verification:
+
+```bash
+systemctl list-units --all | grep -i klipper-backup
+systemctl is-enabled klipper-backup-filewatch.service
+systemctl is-enabled klipper-backup-on-boot.service
+```
+
+Expected result:
+
+```text
+disabled
+disabled
+```
+
+Manual Mainsail buttons still work because they call the script directly. Disabling these services only stops automatic background backups.
+
+---
+
+## Pulling Restored Docs to the Pi
 
 After the GitHub docs were recreated, the Pi's local backup repo was updated:
 
@@ -223,11 +318,12 @@ Then the docs folder was verified:
 ls -la docs
 ```
 
-Expected files:
+Expected files currently include:
 
 ```text
 configuration.md
 future-ideas.md
+klipper-backup-docs-protection.md
 project-history.md
 punch-list.md
 upgrades.md
@@ -254,17 +350,7 @@ Successful result:
 - All documentation files were still present.
 - The backup pushed normally.
 
-Expected docs listing:
-
-```text
-configuration.md
-future-ideas.md
-project-history.md
-punch-list.md
-upgrades.md
-```
-
-This means the Mainsail `update_git` button should be safe to use again.
+This means the Mainsail `update_git` button should be safe to use after GitHub-side changes have been pulled locally.
 
 ---
 
@@ -327,6 +413,7 @@ D docs/configuration.md
 D docs/future-ideas.md
 D docs/project-history.md
 D docs/punch-list.md
+D docs/klipper-backup-docs-protection.md
 ```
 
 If docs are staged or shown as deleted, run:
@@ -340,14 +427,21 @@ Do not run the backup script until docs deletions are gone.
 
 ---
 
-### Step 5 - Re-pull docs if needed
+### Step 5 - Pull docs if needed
 
-If `docs/` is missing locally but exists on GitHub:
+If `docs/` is missing locally but exists on GitHub, use the Mainsail button:
+
+```text
+PULL_FROM_GIT
+```
+
+or SSH:
 
 ```bash
 cd ~/config_backup
-git pull
+git pull --ff-only
 ls -la docs
+git status --short
 ```
 
 ---
@@ -376,3 +470,9 @@ GitHub/ChatGPT owns docs/ and README.md documentation edits.
 The Pi must never stage documentation changes or documentation deletions.
 
 Any future Klipper-Backup update or reinstall should be checked against this page before using `update_git` again.
+
+When a page or file is added directly in GitHub, pull it down to the Pi first:
+
+```text
+Press PULL_FROM_GIT before pressing update_git.
+```
